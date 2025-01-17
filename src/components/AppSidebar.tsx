@@ -1,4 +1,4 @@
-import { ChartRadar, ClipboardList, Home } from "lucide-react";
+import { LineChart, ClipboardList, Home } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -23,7 +23,7 @@ const menuItems = [
   },
   {
     title: "Progress",
-    icon: ChartRadar,
+    icon: LineChart,
     url: "/progress",
   },
 ];

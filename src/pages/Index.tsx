@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const mockData = COMPETENCIES.map((comp) => ({
   ...comp,
-  currentScore: 3,
-  targetScore: 5,
+  currentScore: 3 as const,
+  targetScore: 5 as const,
 }));
 
 const Index = () => {
