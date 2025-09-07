@@ -7,10 +7,16 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { Competency } from "@/types/competency";
+
+interface RadarCompetency {
+  name: string;
+  description: string;
+  currentScore: number;
+  targetScore: number;
+}
 
 interface CompetencyRadarProps {
-  competencies: Competency[];
+  competencies: RadarCompetency[];
 }
 
 export function CompetencyRadar({ competencies }: CompetencyRadarProps) {
