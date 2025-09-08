@@ -14,6 +14,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 import { SkillCategory, AssessmentEntry } from "@/types/database";
 import { useNavigate } from 'react-router-dom';
+import { seedSkillCategories } from '@/lib/seedData';
 
 interface AssessmentFormValues {
   assessmentDate: string;
@@ -42,9 +43,14 @@ const Assessment = () => {
   });
 
   useEffect(() => {
+    initializeData();
+  }, []);
+
+  const initializeData = async () => {
+    await seedSkillCategories();
     fetchSkillCategories();
     fetchAssessmentHistory();
-  }, []);
+  };
 
   const fetchSkillCategories = async () => {
     const { data, error } = await supabase

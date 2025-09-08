@@ -7,45 +7,46 @@ export interface Competency {
   targetScore: CompetencyScore;
 }
 
-export const COMPETENCIES: Omit<Competency, "currentScore" | "targetScore">[] = [
-  {
-    name: "Curiosity & Critical Thinking",
-    description: "Ability to ask insightful questions and analyze problems deeply",
-  },
+// Default skill categories that match the database schema
+export const DEFAULT_SKILL_CATEGORIES = [
   {
     name: "Strategic Thinking",
-    description: "Capacity to understand and plan for long-term objectives",
+    description: "Ability to think long-term and see the big picture",
   },
   {
-    name: "Discovery",
-    description: "Skill in uncovering user needs and market opportunities",
+    name: "Business Acumen", 
+    description: "Understanding of business principles and market dynamics",
   },
   {
-    name: "Business Acumen",
-    description: "Understanding of business metrics and market dynamics",
+    name: "Product Management",
+    description: "Skills in product strategy, roadmapping, and execution",
   },
   {
-    name: "Technology & Data",
-    description: "Knowledge of technical concepts and data analysis",
+    name: "Data Analysis",
+    description: "Ability to interpret data and make data-driven decisions",
   },
   {
-    name: "Domain Knowledge",
-    description: "Understanding of product, company, and industry specifics",
-  },
-  {
-    name: "Driving Outcomes",
-    description: "Ability to execute and deliver measurable results",
-  },
-  {
-    name: "Collaboration",
-    description: "Effectiveness in working with cross-functional teams",
-  },
-  {
-    name: "Leadership",
-    description: "Capability to influence and guide others",
+    name: "User Research",
+    description: "Skills in understanding user needs and conducting research",
   },
   {
     name: "Communication",
-    description: "Skill in conveying ideas and evangelizing product vision",
+    description: "Effective written and verbal communication skills",
+  },
+  {
+    name: "Leadership",
+    description: "Ability to lead teams and influence outcomes",
+  },
+  {
+    name: "Technical Skills",
+    description: "Understanding of technical concepts and tools",
+  },
+  {
+    name: "Project Management",
+    description: "Skills in planning, executing, and delivering projects",
+  },
+  {
+    name: "Innovation",
+    description: "Ability to generate new ideas and drive innovation",
   },
 ];

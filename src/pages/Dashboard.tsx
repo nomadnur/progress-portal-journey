@@ -10,6 +10,7 @@ import { CompetencyRadar } from '@/components/CompetencyRadar';
 import { Plus, TrendingUp, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { seedSkillCategories } from '@/lib/seedData';
 
 const Dashboard = () => {
   const { user, profile } = useAuth();
@@ -22,9 +23,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user) {
-      fetchDashboardData();
+      initializeData();
     }
   }, [user]);
+
+  const initializeData = async () => {
+    // Ensure skill categories exist
+    await seedSkillCategories();
+    // Then fetch dashboard data
+    fetchDashboardData();
+  };
 
   const fetchDashboardData = async () => {
     try {
