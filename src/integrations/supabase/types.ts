@@ -14,7 +14,191 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      artifacts: {
+        Row: {
+          assessment_entry_id: string
+          created_at: string
+          file_path: string | null
+          file_type: string | null
+          id: string
+          title: string
+          url: string | null
+        }
+        Insert: {
+          assessment_entry_id: string
+          created_at?: string
+          file_path?: string | null
+          file_type?: string | null
+          id?: string
+          title: string
+          url?: string | null
+        }
+        Update: {
+          assessment_entry_id?: string
+          created_at?: string
+          file_path?: string | null
+          file_type?: string | null
+          id?: string
+          title?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artifacts_assessment_entry_id_fkey"
+            columns: ["assessment_entry_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_entries: {
+        Row: {
+          assessment_date: string
+          created_at: string
+          id: string
+          notes: string | null
+          score: string
+          skill_category_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assessment_date?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score: string
+          skill_category_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assessment_date?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score?: string
+          skill_category_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_entries_skill_category_id_fkey"
+            columns: ["skill_category_id"]
+            isOneToOne: false
+            referencedRelation: "skill_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      goals: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          skill_category_id: string
+          target_date: string | null
+          target_score: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          skill_category_id: string
+          target_date?: string | null
+          target_score: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          skill_category_id?: string
+          target_date?: string | null
+          target_score?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goals_skill_category_id_fkey"
+            columns: ["skill_category_id"]
+            isOneToOne: false
+            referencedRelation: "skill_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          manager_id: string | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id?: string
+          manager_id?: string | null
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          manager_id?: string | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      skill_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
