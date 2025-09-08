@@ -4,7 +4,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Profile, AssessmentEntry, SkillCategory } from '@/types/database';
 import { CompetencyRadar } from '@/components/CompetencyRadar';
@@ -48,7 +48,7 @@ const ManagerDashboard = () => {
         .select('*')
         .order('sort_order');
 
-      setTeamMembers(members || []);
+      setTeamMembers((members || []) as Profile[]);
       setSkillCategories(categories || []);
 
       // Fetch team aggregate data
@@ -83,7 +83,7 @@ const ManagerDashboard = () => {
         .eq('user_id', memberId)
         .order('assessment_date', { ascending: false });
 
-      setMemberAssessments(assessments || []);
+      setMemberAssessments((assessments || []) as AssessmentEntry[]);
     } catch (error) {
       console.error('Error fetching member assessments:', error);
     }

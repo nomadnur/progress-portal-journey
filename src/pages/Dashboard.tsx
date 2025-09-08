@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { AssessmentEntry, SkillCategory, Goal } from '@/types/database';
 import { CompetencyRadar } from '@/components/CompetencyRadar';
@@ -62,8 +62,8 @@ const Dashboard = () => {
         .eq('user_id', user?.id);
 
       setSkillCategories(categories || []);
-      setLatestAssessments(assessments || []);
-      setGoals(userGoals || []);
+      setLatestAssessments((assessments || []) as AssessmentEntry[]);
+      setGoals((userGoals || []) as Goal[]);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
       toast({

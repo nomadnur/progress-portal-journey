@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { SkillCategory, AssessmentEntry } from "@/types/database";
 import { useNavigate } from 'react-router-dom';
@@ -95,7 +95,7 @@ const Assessment = () => {
       return;
     }
 
-    setAssessmentHistory(data || []);
+    setAssessmentHistory((data || []) as AssessmentEntry[]);
   };
 
   const onSubmit = async (data: AssessmentFormValues) => {
