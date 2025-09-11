@@ -3,6 +3,7 @@ export type CompetencyScore = '1' | '2' | '3' | '4' | '5';
 
 export interface Profile {
   id: string;
+  user_id: string;
   email: string;
   full_name: string | null;
   role: UserRole;
