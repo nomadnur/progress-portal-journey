@@ -36,3 +36,97 @@ export const seedSkillCategories = async () => {
     console.log('Successfully seeded skill categories');
   }
 };
+
+export const seedDemoData = async (currentUserId: string) => {
+  try {
+    // Check if demo data already exists for this user
+    const { data: existingAssessments } = await supabase
+      .from('assessment_entries')
+      .select('id')
+      .eq('user_id', currentUserId)
+      .limit(1);
+
+    if (existingAssessments && existingAssessments.length > 0) {
+      console.log('Demo data already exists for user, skipping seed');
+      return;
+    }
+
+    // Get all skill categories
+    const { data: skillCategories } = await supabase
+      .from('skill_categories')
+      .select('id, name')
+      .order('sort_order');
+
+    if (!skillCategories || skillCategories.length === 0) {
+      console.error('No skill categories found. Please seed skill categories first.');
+      return;
+    }
+
+    // Create demo assessment entries for the current user
+    const demoAssessments = skillCategories.map((category, index) => ({
+      user_id: currentUserId,
+      skill_category_id: category.id,
+      score: String(Math.floor(Math.random() * 3) + 2) as '2' | '3' | '4', // Random scores between 2-4
+      notes: `Current assessment for ${category.name}. Working on improving this area through targeted practice and learning.`,
+      assessment_date: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString() // Random date within last 90 days
+    }));
+
+    // Insert assessment entries
+    const { data: insertedAssessments, error: assessmentError } = await supabase
+      .from('assessment_entries')
+      .insert(demoAssessments)
+      .select('id, skill_category_id');
+
+    if (assessmentError) {
+      console.error('Error seeding assessment entries:', assessmentError);
+      return;
+    }
+
+    // Create demo goals for improvement areas (lower scoring skills)
+    const improvementGoals = skillCategories
+      .filter((_, index) => Math.random() > 0.4) // About 60% chance for each skill
+      .map(category => ({
+        user_id: currentUserId,
+        skill_category_id: category.id,
+        target_score: String(Math.floor(Math.random() * 2) + 4) as '4' | '5', // Target scores of 4 or 5
+        target_date: new Date(Date.now() + Math.random() * 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Random date within next 180 days
+        notes: `Goal to improve ${category.name} through focused learning and practical application.`
+      }));
+
+    if (improvementGoals.length > 0) {
+      const { error: goalsError } = await supabase
+        .from('goals')
+        .insert(improvementGoals);
+
+      if (goalsError) {
+        console.error('Error seeding goals:', goalsError);
+      }
+    }
+
+    // Create demo artifacts for some assessments
+    if (insertedAssessments) {
+      const demoArtifacts = insertedAssessments
+        .filter(() => Math.random() > 0.6) // About 40% of assessments get artifacts
+        .map(assessment => ({
+          assessment_entry_id: assessment.id,
+          title: `Portfolio Example - ${skillCategories.find(c => c.id === assessment.skill_category_id)?.name}`,
+          url: 'https://example.com/portfolio',
+          file_type: 'document'
+        }));
+
+      if (demoArtifacts.length > 0) {
+        const { error: artifactsError } = await supabase
+          .from('artifacts')
+          .insert(demoArtifacts);
+
+        if (artifactsError) {
+          console.error('Error seeding artifacts:', artifactsError);
+        }
+      }
+    }
+
+    console.log('Successfully seeded demo data for user');
+  } catch (error) {
+    console.error('Error seeding demo data:', error);
+  }
+};
