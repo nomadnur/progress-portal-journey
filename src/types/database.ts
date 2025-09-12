@@ -6,7 +6,6 @@ export interface Profile {
   user_id: string;
   email: string;
   full_name: string | null;
-  role: UserRole;
   manager_id: string | null;
   created_at: string;
   updated_at: string;
@@ -27,6 +26,7 @@ export interface AssessmentEntry {
   score: CompetencyScore;
   notes: string | null;
   assessment_date: string;
+  campaign_id?: string | null;
   created_at: string;
   updated_at: string;
   skill_category?: SkillCategory;
@@ -53,4 +53,28 @@ export interface Artifact {
   file_path: string | null;
   file_type: string | null;
   created_at: string;
+}
+
+export interface AssessmentCampaign {
+  id: string;
+  title: string;
+  description?: string;
+  created_by: string;
+  start_date: string;
+  end_date?: string;
+  status: 'draft' | 'active' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CampaignParticipant {
+  id: string;
+  campaign_id: string;
+  user_id: string;
+  status: 'invited' | 'in_progress' | 'completed';
+  invited_by: string;
+  invited_at: string;
+  completed_at?: string;
+  created_at: string;
+  profile?: Profile;
 }

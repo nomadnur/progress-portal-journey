@@ -39,6 +39,20 @@ export const seedSkillCategories = async () => {
 
 export const seedDemoData = async (currentUserId: string) => {
   try {
+    // First, ensure the user has a manager role for testing
+    const { error: roleError } = await supabase
+      .from('user_roles')
+      .upsert({ 
+        user_id: currentUserId, 
+        role: 'manager' 
+      }, { 
+        onConflict: 'user_id,role' 
+      });
+
+    if (roleError) {
+      console.error('Error setting user role:', roleError);
+    }
+
     // Check if demo data already exists for this user
     const { data: existingAssessments } = await supabase
       .from('assessment_entries')

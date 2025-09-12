@@ -1,6 +1,7 @@
-import { BarChart3, ClipboardList, Users, LogOut } from "lucide-react";
+import { BarChart3, ClipboardList, Users, Target, LogOut } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -20,6 +21,7 @@ import {
 export function AppSidebar() {
   const { state } = useSidebar();
   const { profile, signOut } = useAuth();
+  const { isManager } = useUserRole();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -30,9 +32,10 @@ export function AppSidebar() {
 
   const managerItems = [
     { title: "Manager Dashboard", url: "/manager", icon: Users },
+    { title: "Assessment Campaigns", url: "/campaigns", icon: Target },
   ];
 
-  const items = profile?.role === 'manager' || profile?.role === 'admin' 
+  const items = isManager() 
     ? [...userItems, ...managerItems] 
     : userItems;
 

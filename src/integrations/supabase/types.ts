@@ -52,9 +52,46 @@ export type Database = {
           },
         ]
       }
+      assessment_campaigns: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          end_date: string | null
+          id: string
+          start_date: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          start_date: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          start_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       assessment_entries: {
         Row: {
           assessment_date: string
+          campaign_id: string | null
           created_at: string
           id: string
           notes: string | null
@@ -65,6 +102,7 @@ export type Database = {
         }
         Insert: {
           assessment_date?: string
+          campaign_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
@@ -75,6 +113,7 @@ export type Database = {
         }
         Update: {
           assessment_date?: string
+          campaign_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
@@ -85,7 +124,97 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "assessment_entries_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "assessment_entries_skill_category_id_fkey"
+            columns: ["skill_category_id"]
+            isOneToOne: false
+            referencedRelation: "skill_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_participants: {
+        Row: {
+          campaign_id: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          invited_at: string
+          invited_by: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          campaign_id: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          invited_at?: string
+          invited_by: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          invited_at?: string
+          invited_by?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_participants_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_requirements: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          id: string
+          required: boolean
+          skill_category_id: string
+          target_score: string | null
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          id?: string
+          required?: boolean
+          skill_category_id: string
+          target_score?: string | null
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          id?: string
+          required?: boolean
+          skill_category_id?: string
+          target_score?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_requirements_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_requirements_skill_category_id_fkey"
             columns: ["skill_category_id"]
             isOneToOne: false
             referencedRelation: "skill_categories"
@@ -141,7 +270,6 @@ export type Database = {
           full_name: string | null
           id: string
           manager_id: string | null
-          role: string
           updated_at: string
           user_id: string
         }
@@ -151,7 +279,6 @@ export type Database = {
           full_name?: string | null
           id?: string
           manager_id?: string | null
-          role?: string
           updated_at?: string
           user_id: string
         }
@@ -161,7 +288,6 @@ export type Database = {
           full_name?: string | null
           id?: string
           manager_id?: string | null
-          role?: string
           updated_at?: string
           user_id?: string
         }
@@ -199,15 +325,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "manager" | "team_member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -334,6 +487,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "manager", "team_member"],
+    },
   },
 } as const

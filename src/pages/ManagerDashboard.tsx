@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
 import { Profile, AssessmentEntry, SkillCategory } from '@/types/database';
 import { CompetencyRadar } from '@/components/CompetencyRadar';
 import { Users, TrendingUp, Download } from 'lucide-react';
@@ -13,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const ManagerDashboard = () => {
   const { user, profile } = useAuth();
+  const { isManager, loading: roleLoading } = useUserRole();
   const { toast } = useToast();
   const [teamMembers, setTeamMembers] = useState<Profile[]>([]);
   const [selectedMember, setSelectedMember] = useState<string>('');
@@ -22,10 +24,10 @@ const ManagerDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user && (profile?.role === 'manager' || profile?.role === 'admin')) {
+    if (user && isManager()) {
       fetchManagerData();
     }
-  }, [user, profile]);
+  }, [user, isManager]);
 
   useEffect(() => {
     if (selectedMember) {
@@ -178,7 +180,15 @@ const ManagerDashboard = () => {
     });
   };
 
-  if (!profile || (profile.role !== 'manager' && profile.role !== 'admin')) {
+  if (roleLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!isManager()) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Card>

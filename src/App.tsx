@@ -8,6 +8,7 @@ import { AuthForm } from "@/components/auth/AuthForm";
 import Dashboard from "./pages/Dashboard";
 import Assessment from "./pages/Assessment";
 import ManagerDashboard from "./pages/ManagerDashboard";
+import CampaignDashboard from "./pages/CampaignDashboard";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ function AppContent() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/manager" element={<ManagerDashboard />} />
+        <Route path="/campaigns" element={<CampaignDashboard />} />
       </Routes>
     </Router>
   );
