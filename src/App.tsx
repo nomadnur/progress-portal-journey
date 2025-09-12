@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Assessment from "./pages/Assessment";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import CampaignDashboard from "./pages/CampaignDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ function AppContent() {
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/manager" element={<ManagerDashboard />} />
         <Route path="/campaigns" element={<CampaignDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );

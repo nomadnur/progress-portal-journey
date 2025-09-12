@@ -1,4 +1,4 @@
-import { BarChart3, ClipboardList, Users, Target, LogOut } from "lucide-react";
+import { BarChart3, ClipboardList, Users, Target, LogOut, Shield } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -21,7 +21,7 @@ import {
 export function AppSidebar() {
   const { state } = useSidebar();
   const { profile, signOut } = useAuth();
-  const { isManager } = useUserRole();
+  const { isManager, isAdmin } = useUserRole();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -35,9 +35,17 @@ export function AppSidebar() {
     { title: "Assessment Campaigns", url: "/campaigns", icon: Target },
   ];
 
-  const items = isManager() 
-    ? [...userItems, ...managerItems] 
-    : userItems;
+  const adminItems = [
+    { title: "Admin Dashboard", url: "/admin", icon: Shield },
+  ];
+
+  let items = [...userItems];
+  if (isManager()) {
+    items = [...items, ...managerItems];
+  }
+  if (isAdmin()) {
+    items = [...items, ...adminItems];
+  }
 
   const isActive = (path: string) => currentPath === path;
   const getNavCls = ({ isActive }: { isActive: boolean }) =>

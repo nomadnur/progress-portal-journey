@@ -39,18 +39,16 @@ export const seedSkillCategories = async () => {
 
 export const seedDemoData = async (currentUserId: string) => {
   try {
-    // First, ensure the user has a manager role for testing
-    const { error: roleError } = await supabase
-      .from('user_roles')
-      .upsert({ 
-        user_id: currentUserId, 
-        role: 'manager' 
-      }, { 
-        onConflict: 'user_id,role' 
-      });
+    // Set user role to admin for testing (using the secure function)
+    const { data, error: roleError } = await supabase.rpc('assign_user_role', {
+      _user_id: currentUserId,
+      _role: 'admin'
+    });
 
     if (roleError) {
       console.error('Error setting user role:', roleError);
+    } else if (data) {
+      console.log('Successfully assigned admin role');
     }
 
     // Check if demo data already exists for this user
